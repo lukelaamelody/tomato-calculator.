@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomato Paste Brix Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f8f8f8;
+      color: #333;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f0f0;
+      border-radius: 6px;
+    }
+    .note {
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 15px;
+      padding: 10px;
+      background: #eef;
+      border-left: 4px solid #77f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tomato Paste Brix Calculator</h1>
+    <p>Use this tool to calculate how much tomato powder, commercial paste, or sugar is needed when starting with a specific amount of fresh tomatoes to reach a target Brix level.</p>
+
+    <label for="freshTomatoes">Fresh Tomatoes (kg):</label>
+    <input type="number" id="freshTomatoes" value="15" step="0.1">
+
+    <label for="initialBrix">Initial Tomato Brix (%):</label>
+    <input type="number" id="initialBrix" value="5" step="0.1">
+
+    <label for="finalPaste">Final Paste Weight (kg):</label>
+    <input type="number" id="finalPaste" value="5" step="0.1">
+
+    <label for="targetBrix">Target Final Brix (%):</label>
+    <input type="number" id="targetBrix" value="29" step="0.1">
+
+    <h2>Solids Percentages</h2>
+
+    <label for="powderSolids">Tomato Powder Solids (%):</label>
+    <input type="number" id="powderSolids" value="95" step="0.1">
+
+    <label for="pasteSolids">Commercial Paste Solids (%):</label>
+    <input type="number" id="pasteSolids" value="28" step="0.1">
+
+    <label for="sugarSolids">Sugar Solids (%):</label>
+    <input type="number" id="sugarSolids" value="100" step="0.1">
+
+    <div class="results">
+      <h2>Results</h2>
+      <p><strong>Required Total Solids (kg):</strong> <span id="requiredSolids">0</span></p>
+      <p><strong>Solids from Fresh Tomatoes (kg):</strong> <span id="availableSolids">0</span></p>
+      <p><strong>Extra Solids Needed (kg):</strong> <span id="extraSolids">0</span></p>
+
+      <h3>Additive Requirements</h3>
+      <p>Tomato Powder Needed (kg): <span id="powderNeeded">0</span></p>
+      <p>Commercial Paste Needed (kg): <span id="pasteNeeded">0</span></p>
+      <p>Sugar Needed (kg): <span id="sugarNeeded">0</span></p>
+    </div>
+
+    <div class="note">
+      <strong>Instructions:</strong>
+      <ul>
+        <li>Enter your starting inputs above (weights and percentages).</li>
+        <li>The calculator will show how much extra solids are needed to achieve your target Brix.</li>
+        <li>Choose either tomato powder, commercial paste, or sugar as your additive source.</li>
+        <li>If Extra Solids Needed is 0, you don't need any additives.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      const freshTomatoes = parseFloat(document.getElementById('freshTomatoes').value) || 0;
+      const initialBrix = parseFloat(document.getElementById('initialBrix').value) || 0;
+      const finalPaste = parseFloat(document.getElementById('finalPaste').value) || 0;
+      const targetBrix = parseFloat(document.getElementById('targetBrix').value) || 0;
+      const powderSolids = (parseFloat(document.getElementById('powderSolids').value) || 0) / 100;
+      const pasteSolids = (parseFloat(document.getElementById('pasteSolids').value) || 0) / 100;
+      const sugarSolids = (parseFloat(document.getElementById('sugarSolids').value) || 0) / 100;
+
+      const requiredSolids = finalPaste * (targetBrix / 100);
+      const availableSolids = freshTomatoes * (initialBrix / 100);
+      const extraSolids = Math.max(requiredSolids - availableSolids, 0);
+
+      const powderNeeded = extraSolids / powderSolids;
+      const pasteNeeded = extraSolids / pasteSolids;
+      const sugarNeeded = extraSolids / sugarSolids;
+
+      document.getElementById('requiredSolids').innerText = requiredSolids.toFixed(3);
+      document.getElementById('availableSolids').innerText = availableSolids.toFixed(3);
+      document.getElementById('extraSolids').innerText = extraSolids.toFixed(3);
+
+      document.getElementById('powderNeeded').innerText = powderNeeded.toFixed(3);
+      document.getElementById('pasteNeeded').innerText = pasteNeeded.toFixed(3);
+      document.getElementById('sugarNeeded').innerText = sugarNeeded.toFixed(3);
+    }
+
+    // Trigger calculation whenever an input changes
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', calculate);
+    });
+
+    // Initial calculation
+    calculate();
+  </script>
+</body>
+</html>
